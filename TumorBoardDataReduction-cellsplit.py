@@ -1,6 +1,6 @@
 # modulate imports
 import pandas as pd
-import re
+#import re
 # CSV file import
 df = pd.read_csv("/Users/jamie/Desktop/UNC Work Files/10012015-0114.csv")
 
@@ -14,7 +14,7 @@ md.columns = ['MD', 'MD2', 'MD3', 'MD4', 'MD5', 'MD6','MD7']
 refmd = df.iloc[:, 2].str.split('\n', expand=True)
 refmd.column = ['refmd', 'refmd2']
 
-diag = refmd = pat = df.iloc[:, 3]
+diag = df.iloc[:, 3]
 
 # replacement variables for to simplify diag
 p = 'Prostate'
@@ -59,8 +59,13 @@ for string in diag:
         diag_type.append(cancer[2]) 
     else:
         diag_type.append(string)
-#print(diag_type)
+diag_type.column = ['Cancer Type']
+
+print(diag_type)
 #print(diag[0:30])
+
+
+#Patient duplicate search
 
 #def stringReplace(stringOld, stringNew):
 #    for s in stringOld:
