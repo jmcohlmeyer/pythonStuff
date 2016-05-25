@@ -7,16 +7,8 @@ Created on Mon Mar 14 21:15:17 2016
 
 # ---modulate imports---
 import pandas as pd
-#import datetime as dt
 
-#import re
-# ---CSV file import---
-#df1 = pd.read_csv("/Users/jamie/Desktop/UNC Work Files/ReferralandMailComboList.csv")
-#headers  = list(df1)
-#print(df1.head())
-
-
-df = pd.read_csv("/Users/jamie/Desktop/UNC Work Files/GUConferencePrint-155.csv")
+df = pd.read_csv("/Users/jamie/Desktop/UNC Work Files/GUConferencePrint-163-05242016.csv")
 
 # ---Column splits---
 pat = df.iloc[:, 0].str.split('\n', expand=True)
@@ -24,48 +16,28 @@ pat.columns = ['PATIENT_name', 'PID', 'pAGE']
 
 #print (pat)
 
-#md = df.iloc[:, 1].str.split('\n', expand=True)
-#md.columns = ['MD', 'MD2', 'MD3', 'MD4', 'MD5','MD6']
-
-# --- loop for referral date cleaning ----
+# --- loops for referral date cleaning ----
 referral_d = df.iloc[:,1]
-
-
-#fmts = ('%m/%d/%Y','%m/%d/%y')
-#
-#parsed=[]
-#for e in referral_d.splitlines():
-#    for fmt in fmts:
-#        try:
-#           t = dt.datetime.strptime(e, fmt)
-#           parsed.append((e, fmt, t)) 
-#           break
-#        except ValueError as err:
-#           pass
-#
-## check that all the cases are handled        
-#success={t[0] for t in parsed}
-#for e in referral_d.splitlines():
-#    if e not in success:
-#        print (e)    
-#
-#for t in parsed:
-#    print ('"{:20}" => "{:20}" => {}'.format(*t))
-#
-#
-
-
 
 ref_date = []
 
-#cnt = len(referral_d)
-
 for d in referral_d:   
-        ref_date.append('05/16/2016')
+        ref_date.append('05/23/2016')
         
 ref_date_sum = pd.DataFrame(ref_date)
 ref_date_sum.columns = ['Referral Date']    
 print (ref_date_sum)
+
+# --- Additional Variables to Export ---
+
+ref_year = []
+
+for y in referral_d:   
+        ref_year.append('2016')
+        
+ref_year_sum = pd.DataFrame(ref_year)
+ref_year_sum.columns = ['DateYear']    
+print (ref_year_sum)
 
 refmd = df.iloc[:, 2].str.split(',', expand=True)
 refmd.columns = ['Physician Last Name','Physician First Name']
@@ -76,6 +48,7 @@ diag = df.iloc[:, 3]
 cancer = ['Prostate','Bladder','Testicular','Penile','Renal','Ureteral','Kidney','Other','Urothelial','Upper Tract','Ureteral','Scrotal','Ureter','Testis','Penis']
 
 # ---Loop for diag simplifcation---
+
 diag_type = []
 
 for string in diag:
@@ -112,14 +85,9 @@ for string in diag:
         
 diag_sum = pd.DataFrame(diag_type)
 diag_sum.columns = ['Cancer Type']
-#print(diag_sum)
-
-
-# --- Additional Variables to Export ---
-#year = 2016
 
 # ---Export reduced data as CSV---
-df_out =  pd.concat([ref_date_sum, diag_sum, refmd], axis=1, join_axes=[pat.index])
-df_out.to_csv("/Users/jamie/Desktop/UNC Work Files/GUConferencePrint-155-05172016.csv", encoding='utf-8')
+df_out =  pd.concat([ref_date_sum, ref_year_sum, diag_sum, refmd], axis=1, join_axes=[pat.index])
+df_out.to_csv("/Users/jamie/Desktop/UNC Work Files/GUConferencePrint-163-05242016export.csv", encoding='utf-8')
 
         
